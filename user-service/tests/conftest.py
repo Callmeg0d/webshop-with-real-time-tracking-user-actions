@@ -54,14 +54,8 @@ async def test_db_session(test_engine):
         await session.commit()
 
 
-@pytest.fixture
-def mock_publish_registration(mocker):
-    """Фикстура для мока publish_registration_confirmation"""
-    mocker.patch('app.services.auth_service.publish_registration_confirmation')
-
-
 @pytest.fixture(scope="function")
-async def async_client(test_db_session: AsyncSession, mock_publish_registration):
+async def async_client(test_db_session: AsyncSession):
     """Создает AsyncClient для тестирования API"""
     async def override_get_db():
         yield test_db_session

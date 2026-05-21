@@ -7,7 +7,6 @@ from app.repositories.saga_reservation_repository import SagaReservationReposito
 from app.services.order_service import OrderService
 from app.services.order_validator import OrderValidator
 from app.services.payment_service import PaymentService
-from app.services.order_notification_service import OrderNotificationService
 
 
 class Container(containers.DeclarativeContainer):
@@ -32,14 +31,12 @@ class Container(containers.DeclarativeContainer):
 
     order_validator = providers.Singleton(OrderValidator)
     payment_service = providers.Singleton(PaymentService)
-    notification_service = providers.Singleton(OrderNotificationService)
 
     order_service = providers.Factory(
         OrderService,
         orders_repository=orders_repository,
         order_validator=order_validator,
         payment_service=payment_service,
-        notification_service=notification_service,
         uow_factory=uow_factory
     )
 

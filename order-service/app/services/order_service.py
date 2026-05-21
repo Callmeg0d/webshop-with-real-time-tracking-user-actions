@@ -11,7 +11,6 @@ from app.services.cart_client import get_cart_items, get_cart_total
 from app.services.product_client import get_product
 from app.services.order_validator import OrderValidator
 from app.services.payment_service import PaymentService
-from app.services.order_notification_service import OrderNotificationService
 from app.services.user_client import get_user_delivery_address
 from app.messaging.publisher import (
     publish_order_created,
@@ -30,13 +29,11 @@ class OrderService:
         orders_repository: IOrdersRepository,
         order_validator: OrderValidator,
         payment_service: PaymentService,
-        notification_service: OrderNotificationService,
         uow_factory: IUnitOfWorkFactory
     ):
         self.orders_repository = orders_repository
         self.validator = order_validator
         self.payment = payment_service
-        self.notification = notification_service
         self.uow_factory = uow_factory
 
     async def create_order(self, user_id: int) -> OrderItem:
@@ -123,10 +120,6 @@ class OrderService:
                     "total_cost": order.total_cost
                 }
                 await publish_order_confirmed(order_dict)
-                logger.info(f"Order confirmed event published for order {order_id}")
-                
-                # Отправляем уведомление
-                await self.notification.send_order_confirmation(order.user_id, order)
                 logger.info(f"Order {order_id} confirmed successfully")
         except Exception as e:
             logger.error(f"Error confirming order {order_id}: {e}", exc_info=True)

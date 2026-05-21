@@ -3,7 +3,6 @@ from datetime import datetime, timedelta, timezone
 from jose import jwt as jose_jwt, JWTError
 
 
-import app.services.auth_service as auth_service_module
 from app.config import settings
 from app.domain.entities.users import UserItem
 from app.exceptions import UserAlreadyExistsException, IncorrectEmailOrPasswordException, TokenExpiredException
@@ -68,13 +67,6 @@ class TestAuthServiceRegisterUser:
         
         mock_repository.get_user_by_email = mocker.AsyncMock(return_value=None)
         mock_repository.create_user = mocker.AsyncMock(return_value=created_user)
-        
-        # Мокаем publish_registration_confirmation
-        mocker.patch.object(
-            auth_service_module,
-            'publish_registration_confirmation',
-            return_value=None
-        )
         
         result = await auth_service.register_user(user_data)
         
