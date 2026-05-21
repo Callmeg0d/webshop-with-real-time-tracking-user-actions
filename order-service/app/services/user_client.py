@@ -71,27 +71,3 @@ async def decrease_user_balance(user_id: int, amount: int) -> None:
         )
         response.raise_for_status()
 
-
-async def get_user_email(user_id: int) -> str | None:
-    """
-    Получает email пользователя из user-service.
-
-    Args:
-        user_id: ID пользователя
-
-    Returns:
-        Email пользователя или None
-
-    Raises:
-        httpx.HTTPStatusError: Если сервис недоступен
-    """
-    async with httpx.AsyncClient() as client:
-        response = await client.get(
-            f"{settings.USER_SERVICE_URL}/users/me",
-            headers={HttpHeaders.X_USER_ID.value: str(user_id)},
-            timeout=HttpTimeout.DEFAULT.value
-        )
-        response.raise_for_status()
-        user_data = response.json()
-        return user_data.get("email")
-

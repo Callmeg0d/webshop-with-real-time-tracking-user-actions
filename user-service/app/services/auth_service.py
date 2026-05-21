@@ -11,7 +11,6 @@ from app.domain.interfaces.users_repo import IUsersRepository
 from app.domain.interfaces.unit_of_work import IUnitOfWorkFactory
 from app.exceptions import UserAlreadyExistsException, IncorrectEmailOrPasswordException, TokenExpiredException
 from app.schemas.users import SUserAuth, STokenResponse
-from app.messaging.publisher import publish_registration_confirmation
 
 logger = get_logger(__name__)
 
@@ -65,10 +64,6 @@ class AuthService:
                     )
                 )
                 logger.info(f"User created successfully, user_id: {user.id}")
-
-            # Отправляем email с подтверждением регистрации
-            await publish_registration_confirmation(user_data.email)
-            logger.debug(f"Registration confirmation event published for {user_data.email}")
 
             return user
         except UserAlreadyExistsException:

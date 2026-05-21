@@ -24,10 +24,6 @@ class TestOrderServiceCreateOrder:
         return mocker.AsyncMock()
     
     @pytest.fixture
-    def mock_notification_service(self, mocker):
-        return mocker.AsyncMock()
-    
-    @pytest.fixture
     def mock_uow(self, mocker):
         uow = mocker.AsyncMock()
         uow.__aenter__ = mocker.AsyncMock(return_value=uow)
@@ -46,14 +42,12 @@ class TestOrderServiceCreateOrder:
         mock_repository,
         mock_validator,
         mock_payment_service,
-        mock_notification_service,
         mock_uow_factory
     ):
         return OrderService(
             orders_repository=mock_repository,
             order_validator=mock_validator,
             payment_service=mock_payment_service,
-            notification_service=mock_notification_service,
             uow_factory=mock_uow_factory
         )
     
@@ -137,10 +131,6 @@ class TestOrderServiceGetUserOrders:
         return mocker.AsyncMock()
     
     @pytest.fixture
-    def mock_notification_service(self, mocker):
-        return mocker.AsyncMock()
-    
-    @pytest.fixture
     def mock_uow_factory(self, mocker):
         return mocker.Mock()
     
@@ -150,14 +140,12 @@ class TestOrderServiceGetUserOrders:
         mock_repository,
         mock_validator,
         mock_payment_service,
-        mock_notification_service,
         mock_uow_factory
     ):
         return OrderService(
             orders_repository=mock_repository,
             order_validator=mock_validator,
             payment_service=mock_payment_service,
-            notification_service=mock_notification_service,
             uow_factory=mock_uow_factory
         )
     
@@ -240,10 +228,6 @@ class TestOrderServiceConfirmOrder:
         return mocker.AsyncMock()
     
     @pytest.fixture
-    def mock_notification_service(self, mocker):
-        return mocker.AsyncMock()
-    
-    @pytest.fixture
     def mock_uow(self, mocker):
         uow = mocker.AsyncMock()
         uow.__aenter__ = mocker.AsyncMock(return_value=uow)
@@ -262,14 +246,12 @@ class TestOrderServiceConfirmOrder:
         mock_repository,
         mock_validator,
         mock_payment_service,
-        mock_notification_service,
         mock_uow_factory
     ):
         return OrderService(
             orders_repository=mock_repository,
             order_validator=mock_validator,
             payment_service=mock_payment_service,
-            notification_service=mock_notification_service,
             uow_factory=mock_uow_factory
         )
     
@@ -278,7 +260,6 @@ class TestOrderServiceConfirmOrder:
         self,
         order_service: OrderService,
         mock_repository,
-        mock_notification_service,
         mock_uow,
         mock_uow_factory,
         mocker
@@ -320,7 +301,6 @@ class TestOrderServiceConfirmOrder:
         
         mock_repository.get_order_by_id.assert_called()
         mock_repository.update_order_status.assert_called_once_with(order_id, OrderStatus.CONFIRMED)
-        mock_notification_service.send_order_confirmation.assert_called_once()
         mock_uow_factory.create.assert_called_once()
     
     @pytest.mark.asyncio
@@ -367,10 +347,6 @@ class TestOrderServiceFailOrder:
         return mocker.AsyncMock()
     
     @pytest.fixture
-    def mock_notification_service(self, mocker):
-        return mocker.AsyncMock()
-    
-    @pytest.fixture
     def mock_uow(self, mocker):
         uow = mocker.AsyncMock()
         uow.__aenter__ = mocker.AsyncMock(return_value=uow)
@@ -389,14 +365,12 @@ class TestOrderServiceFailOrder:
         mock_repository,
         mock_validator,
         mock_payment_service,
-        mock_notification_service,
         mock_uow_factory
     ):
         return OrderService(
             orders_repository=mock_repository,
             order_validator=mock_validator,
             payment_service=mock_payment_service,
-            notification_service=mock_notification_service,
             uow_factory=mock_uow_factory
         )
     

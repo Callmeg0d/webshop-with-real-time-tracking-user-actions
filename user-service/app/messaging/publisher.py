@@ -1,14 +1,4 @@
-from pydantic import EmailStr
-
 from app.messaging.broker import broker
-
-
-async def publish_registration_confirmation(email: EmailStr) -> None:
-    """Публикует событие регистрации пользователя для отправки email."""
-    await broker.publish(
-        message=email,
-        topic="registration_confirmation",
-    )
 
 
 async def publish_balance_reserved(order_id: int) -> None:
